@@ -193,33 +193,33 @@ const editBookByIdHandler = (request, h) => {
   return response;
 };
 
-// const deleteNoteByIdHandler = (request, h) => {
-//   const { id } = request.params;
+const deleteBookByIdHandler = (request, h) => {
+  const { id } = request.params;
 
-//   const index = notes.findIndex((note) => note.id === id);
+  const index = bookList.findIndex((book) => book.id === id);
 
-//   if (index !== -1) {
-//     notes.splice(index, 1);
-//     const response = h.response({
-//       status: 'success',
-//       message: 'Catatan berhasil dihapus',
-//     });
-//     response.code(200);
-//     return response;
-//   }
+  if (index !== -1) {
+    bookList.splice(index, 1);
+    const response = h.response({
+      status: 'success',
+      message: 'Buku berhasil dihapus',
+    });
+    response.code(200);
+    return response;
+  }
 
-//   const response = h.response({
-//     status: 'fail',
-//     message: 'Catatan gagal dihapus. Id tidak ditemukan',
-//   });
-//   response.code(404);
-//   return response;
-// };
+  const response = h.response({
+    status: 'fail',
+    message: 'Buku gagal dihapus. Id tidak ditemukan',
+  });
+  response.code(404);
+  return response;
+};
 
 module.exports = {
   addBookHandler,
   getAllBooksHandler,
   getBookByIdHandler,
   editBookByIdHandler,
-  // deleteBookByIdHandler,
+  deleteBookByIdHandler,
 };
