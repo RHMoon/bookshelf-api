@@ -1,5 +1,5 @@
 const { nanoid } = require('nanoid');
-const books = require('./books');
+const bookList = require('./bookShelf');
 
 const addBookHandler = (request, h) => {
   const {
@@ -55,9 +55,9 @@ const addBookHandler = (request, h) => {
     updatedAt,
   };
 
-  books.push(newBook);
+  bookList.push(newBook);
 
-  const isSuccess = books.filter((book) => book.id === id).length > 0;
+  const isSuccess = bookList.filter((book) => book.id === id).length > 0;
 
   if (isSuccess) {
     const response = h.response({
@@ -80,7 +80,7 @@ const addBookHandler = (request, h) => {
 };
 
 const getAllBooksHandler = () => {
-  const booksData = books.map(
+  const books = bookList.map(
     ({
       year,
       author,
@@ -98,7 +98,7 @@ const getAllBooksHandler = () => {
   return {
     status: 'success',
     data: {
-      booksData,
+      books,
     },
   };
 };
@@ -106,7 +106,7 @@ const getAllBooksHandler = () => {
 const getBookByIdHandler = (request, h) => {
   const { id } = request.params;
 
-  const book = books.filter((b) => b.id === id)[0];
+  const book = bookList.filter((b) => b.id === id)[0];
 
   if (book !== undefined) {
     return {
@@ -139,7 +139,7 @@ const editBookByIdHandler = (request, h) => {
   } = request.payload;
   const updatedAt = new Date().toISOString();
 
-  const index = books.findIndex((book) => book.id === id);
+  const index = bookList.findIndex((book) => book.id === id);
 
   if (name === undefined) {
     const response = h.response({
@@ -165,8 +165,8 @@ const editBookByIdHandler = (request, h) => {
       finished = true;
     }
 
-    books[index] = {
-      ...books[index],
+    bookList[index] = {
+      ...bookList[index],
       name,
       year,
       author,
