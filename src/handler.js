@@ -79,21 +79,44 @@ const addBookHandler = (request, h) => {
   return response;
 };
 
-const getAllBooksHandler = () => {
-  const books = bookList.map(
-    ({
-      year,
-      author,
-      summary,
-      pageCount,
-      readPage,
-      finished,
-      reading,
-      insertedAt,
-      updatedAt,
-      ...rest
-    }) => rest,
-  );
+const getAllBooksHandler = (request) => {
+  const { name, reading, finished } = request.query;
+  const keysToKeep = ['id', 'name', 'publisher'];
+  let books;
+  books = bookList.map((book) => keysToKeep.reduce((acc, curr) => {
+    acc[curr] = book[curr];
+    return acc;
+  }, {}));
+
+  if (name !== undefined) {
+    const findName = name;
+    books = bookList
+      .filter(
+        (book) => book.name.toLowerCase().indexOf(findName.toLowerCase()) !== -1,
+      )
+      .map((book) => keysToKeep.reduce((acc, curr) => {
+        acc[curr] = book[curr];
+        return acc;
+      }, {}));
+  }
+  if (finished !== undefined) {
+    const finishStatus = finished === '1';
+    books = bookList
+      .filter((book) => book.finished === finishStatus)
+      .map((book) => keysToKeep.reduce((acc, curr) => {
+        acc[curr] = book[curr];
+        return acc;
+      }, {}));
+  }
+  if (reading !== undefined) {
+    const readingStatus = reading === '1';
+    books = bookList
+      .filter((book) => book.reading === readingStatus)
+      .map((book) => keysToKeep.reduce((acc, curr) => {
+        acc[curr] = book[curr];
+        return acc;
+      }, {}));
+  }
 
   return {
     status: 'success',
